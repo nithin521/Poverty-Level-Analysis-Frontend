@@ -50,7 +50,7 @@ function App() {
     console.log("Form data submitted:", formData);
     try {
       const response = await axios.post(
-        "https://YOUR-USERNAME-poverty-level.hf.space/predict",
+        "https://nithin521-poverty-level.hf.space/predict",
         formData
       );
       setPrediction(response.data);
