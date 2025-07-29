@@ -12,68 +12,23 @@ import {
   Pie,
   Legend,
 } from "recharts";
+import globalShapDataRegression from "../data/global_importancer.json";
+import globalShapDataClassification from "../data/global_importancec.json";
 
-const FeatureImportance = ({ formData, prediction }) => {
+const FeatureImportance = ({
+  formData,
+  prediction,
+  modelType = "regression",
+}) => {
   const [explanationData, setExplanationData] = useState(null);
-  const [selectedView, setSelectedView] = useState("global"); // 'global' or 'local'
+  const [selectedView, setSelectedView] = useState("local"); // 'global' or 'local'
+  const [selectedGlobalType, setSelectedGlobalType] = useState("regression"); // 'regression' or 'classification'
   const [loading, setLoading] = useState(true);
 
-  // Mock SHAP-style feature importance calculation
-  // const calculateFeatureImportance = () => {
-  //   // Global feature importance (based on typical poverty prediction models)
-  //   const globalImportance = {
-  //     literatePopulation: { importance: 0.18, impact: 'negative', description: 'Higher literacy reduces poverty' },
-  //     totalWorkingPopulation: { importance: 0.16, impact: 'negative', description: 'More employment reduces poverty' },
-  //     householdsWithInternet: { importance: 0.14, impact: 'negative', description: 'Digital access reduces poverty' },
-  //     unemployedPopulation: { importance: 0.13, impact: 'positive', description: 'Higher unemployment increases poverty' },
-  //     st: { importance: 0.11, impact: 'positive', description: 'ST population correlation with poverty' },
-  //     sc: { importance: 0.10, impact: 'positive', description: 'SC population correlation with poverty' },
-  //     ruralHouseholds: { importance: 0.08, impact: 'positive', description: 'Rural areas tend to have higher poverty' },
-  //     urbanHouseholds: { importance: 0.06, impact: 'negative', description: 'Urban areas tend to have lower poverty' },
-  //     illiteratePopulation: { importance: 0.04, impact: 'positive', description: 'Higher illiteracy increases poverty' }
-  //   };
-
-  //   // Calculate local SHAP values based on input data
-  //   const totalPop = parseInt(formData.totalPopulation) || 1;
-  //   const localShapValues = {};
-
-  //   Object.keys(globalImportance).forEach(feature => {
-  //     const value = parseInt(formData[feature]) || 0;
-  //     const ratio = value / totalPop;
-  //     const baseImportance = globalImportance[feature].importance;
-
-  //     // Simulate SHAP value calculation
-  //     let shapValue = baseImportance * (ratio - 0.5) * 2; // Normalized around 0.5
-  //     if (globalImportance[feature].impact === 'positive') {
-  //       shapValue = -shapValue; // Flip for positive impact features
-  //     }
-
-  //     localShapValues[feature] = {
-  //       ...globalImportance[feature],
-  //       shapValue: shapValue,
-  //       contribution: shapValue > 0 ? 'increases' : 'decreases',
-  //       magnitude: Math.abs(shapValue)
-  //     };
-  //   });
-
-  //   return { globalImportance, localShapValues };
-  // };
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   // Simulate API call delay
-  //   setTimeout(() => {
-  //     const explanation = calculateFeatureImportance();
-  //     setExplanationData(explanation);
-  //     setLoading(false);
-  //   }, 1000);
-  // }, [formData]);
   useEffect(() => {
-    if (prediction && prediction.explanation) {
-      const explanation = prediction.explanation;
-
+    if (prediction?.explanation) {
       const localShapValues = {};
-      explanation.forEach((item) => {
+      prediction.explanation.forEach((item) => {
         localShapValues[item.feature] = {
           importance: item.importance,
           impact: item.impact,
@@ -85,17 +40,30 @@ const FeatureImportance = ({ formData, prediction }) => {
         };
       });
 
-      // If you want to preserve global importance too:
-      const globalImportance = explanation.reduce((acc, item) => {
-        acc[item.feature] = {
+      // Load both global importance datasets
+      const globalImportanceRegression = {};
+      globalShapDataRegression.forEach((item) => {
+        globalImportanceRegression[item.feature] = {
           importance: item.importance,
           impact: item.impact,
           description: item.description,
         };
-        return acc;
-      }, {});
+      });
 
-      setExplanationData({ globalImportance, localShapValues });
+      const globalImportanceClassification = {};
+      globalShapDataClassification.forEach((item) => {
+        globalImportanceClassification[item.feature] = {
+          importance: item.importance,
+          impact: item.impact,
+          description: item.description,
+        };
+      });
+
+      setExplanationData({
+        globalImportanceRegression,
+        globalImportanceClassification,
+        localShapValues,
+      });
       setLoading(false);
     }
   }, [prediction]);
@@ -113,8 +81,14 @@ const FeatureImportance = ({ formData, prediction }) => {
 
   if (!explanationData) return null;
 
+  // Get current global importance data based on selected type
+  const currentGlobalImportance =
+    selectedGlobalType === "regression"
+      ? explanationData.globalImportanceRegression
+      : explanationData.globalImportanceClassification;
+
   // Prepare data for global importance chart
-  const globalChartData = Object.entries(explanationData.globalImportance)
+  const globalChartData = Object.entries(currentGlobalImportance)
     .map(([feature, data]) => ({
       feature: feature
         .replace(/([A-Z])/g, " $1")
@@ -181,11 +155,54 @@ const FeatureImportance = ({ formData, prediction }) => {
       {selectedView === "global" && (
         <div className="global-importance">
           <div className="explanation-section">
-            <h4>📊 Global Feature Importance</h4>
+            <div className="global-header">
+              <h4>📊 Global Feature Importance</h4>
+              <div className="model-type-selector">
+                <button
+                  className={`model-btn ${
+                    selectedGlobalType === "regression" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedGlobalType("regression")}
+                >
+                  📈 Regression Model
+                </button>
+                <button
+                  className={`model-btn ${
+                    selectedGlobalType === "classification" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedGlobalType("classification")}
+                >
+                  🎯 Classification Model
+                </button>
+              </div>
+            </div>
+
             <p>
               Shows the overall importance of each feature across all
-              predictions
+              predictions in the <strong>{selectedGlobalType}</strong> model
             </p>
+
+            <div className="model-description">
+              {selectedGlobalType === "regression" ? (
+                <div className="model-info regression">
+                  <h5>🔢 Regression Model Analysis</h5>
+                  <p>
+                    This model predicts continuous MPI (Multidimensional Poverty
+                    Index) values, showing the degree of poverty as a numerical
+                    score between 0 and 1.
+                  </p>
+                </div>
+              ) : (
+                <div className="model-info classification">
+                  <h5>🎯 Classification Model Analysis</h5>
+                  <p>
+                    This model predicts discrete poverty categories (e.g.,
+                    Poor/Non-Poor), providing binary or categorical
+                    classifications of poverty status.
+                  </p>
+                </div>
+              )}
+            </div>
 
             <div className="chart-container">
               <ResponsiveContainer width="100%" height={400}>
@@ -217,6 +234,7 @@ const FeatureImportance = ({ formData, prediction }) => {
                             <p className="tooltip-importance">
                               Importance: {(data.importance * 100).toFixed(1)}%
                             </p>
+
                             <p className="tooltip-description">
                               {data.description}
                             </p>
@@ -231,7 +249,13 @@ const FeatureImportance = ({ formData, prediction }) => {
                       <Cell
                         key={`cell-${index}`}
                         fill={
-                          entry.impact === "positive" ? "#ef4444" : "#10b981"
+                          selectedGlobalType === "regression"
+                            ? entry.impact === "positive"
+                              ? "#ef4444"
+                              : "#10b981"
+                            : entry.impact === "positive"
+                            ? "#f59e0b"
+                            : "#3b82f6"
                         }
                       />
                     ))}
@@ -240,14 +264,28 @@ const FeatureImportance = ({ formData, prediction }) => {
               </ResponsiveContainer>
             </div>
 
-            <div className="importance-legend">
-              <div className="legend-item">
-                <div className="legend-color positive"></div>
-                <span>Increases Poverty Risk</span>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color negative"></div>
-                <span>Decreases Poverty Risk</span>
+            {/* Comparison insights */}
+            <div className="model-comparison">
+              <h5>🔄 Model Comparison Insights</h5>
+              <div className="comparison-grid">
+                <div className="comparison-card">
+                  <h6>📈 Regression Model</h6>
+                  <ul>
+                    <li>Provides continuous poverty scores (0-1)</li>
+                    <li>Better for understanding poverty severity</li>
+                    <li>Useful for policy intervention targeting</li>
+                    <li>Shows gradual poverty transitions</li>
+                  </ul>
+                </div>
+                <div className="comparison-card">
+                  <h6>🎯 Classification Model</h6>
+                  <ul>
+                    <li>Provides discrete poverty categories</li>
+                    <li>Better for binary decision making</li>
+                    <li>Useful for resource allocation</li>
+                    <li>Shows clear poverty thresholds</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -260,17 +298,24 @@ const FeatureImportance = ({ formData, prediction }) => {
             <h4>🎯 Local SHAP Values for Current Input</h4>
             <p>
               Shows how each feature contributes to this specific prediction
+              (Based on {modelType} model)
             </p>
 
             <div className="shap-summary">
               <div className="prediction-breakdown">
                 <div className="base-prediction">
                   <span className="label">Base Prediction:</span>
-                  <span className="value">0.300</span>
+                  <span className="value">
+                    {modelType === "regression" ? "0.300" : "0.500"}
+                  </span>
                 </div>
                 <div className="final-prediction">
                   <span className="label">Final Prediction:</span>
-                  <span className="value">{prediction?.mpiHcr || "0.000"}</span>
+                  <span className="value">
+                    {modelType === "regression"
+                      ? `${prediction?.mpiHcr || "0.000"} MPI`
+                      : `${prediction?.classification || "Non-Poor"}`}
+                  </span>
                 </div>
               </div>
             </div>
@@ -306,7 +351,9 @@ const FeatureImportance = ({ formData, prediction }) => {
                                 {data.contribution === "increases"
                                   ? "Increases"
                                   : "Decreases"}{" "}
-                                poverty risk
+                                {modelType === "regression"
+                                  ? "poverty risk"
+                                  : "poverty classification probability"}
                               </p>
                             </div>
                           );
@@ -374,8 +421,10 @@ const FeatureImportance = ({ formData, prediction }) => {
                   </div>
                   <p className="card-description">
                     This feature <strong>{feature.contribution}</strong> the
-                    poverty prediction by{" "}
-                    <strong>{Math.abs(feature.shapValue).toFixed(4)}</strong>{" "}
+                    {modelType === "regression"
+                      ? " poverty prediction"
+                      : " poverty classification probability"}{" "}
+                    by <strong>{Math.abs(feature.shapValue).toFixed(4)}</strong>{" "}
                     points.
                   </p>
                 </div>
@@ -390,14 +439,20 @@ const FeatureImportance = ({ formData, prediction }) => {
                 <span className="guide-icon positive">+</span>
                 <div className="guide-text">
                   <strong>Positive SHAP values</strong> push the prediction
-                  towards higher poverty risk
+                  towards{" "}
+                  {modelType === "regression"
+                    ? "higher poverty risk"
+                    : "poverty classification"}
                 </div>
               </div>
               <div className="guide-item">
                 <span className="guide-icon negative">-</span>
                 <div className="guide-text">
                   <strong>Negative SHAP values</strong> push the prediction
-                  towards lower poverty risk
+                  towards{" "}
+                  {modelType === "regression"
+                    ? "lower poverty risk"
+                    : "non-poverty classification"}
                 </div>
               </div>
               <div className="guide-item">
