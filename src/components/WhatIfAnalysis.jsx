@@ -75,22 +75,6 @@ const WhatIfAnalysis = ({ originalData, onAnalysisChange }) => {
       max: parseInt(originalData.households) || 10000,
       step: 10,
     },
-    st: {
-      label: "Scheduled Tribes (ST)",
-      description: "ST population count",
-      impact: 0.2,
-      min: 0,
-      max: parseInt(originalData.totalPopulation) || 100000,
-      step: 50,
-    },
-    sc: {
-      label: "Scheduled Castes (SC)",
-      description: "SC population count",
-      impact: 0.18,
-      min: 0,
-      max: parseInt(originalData.totalPopulation) || 100000,
-      step: 50,
-    },
   };
 
   const calculateSimulatedResults = async () => {
