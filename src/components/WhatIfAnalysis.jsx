@@ -101,7 +101,7 @@ const WhatIfAnalysis = ({ originalData, onAnalysisChange }) => {
 
     try {
       // Fetch original if not already present
-      const originalResponse = await fetch("http://localhost:5000/predict", {
+      const originalResponse = await fetch("https://nithin521-poverty-level.hf.space/predict", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(originalData),
@@ -109,7 +109,7 @@ const WhatIfAnalysis = ({ originalData, onAnalysisChange }) => {
       const originalResult = await originalResponse.json();
 
       // Fetch adjusted
-      const adjustedResponse = await fetch("http://localhost:5000/predict", {
+      const adjustedResponse = await fetch("https://nithin521-poverty-level.hf.space/predict", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(mergedData),
