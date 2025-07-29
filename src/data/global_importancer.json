@@ -1,0 +1,104 @@
+[
+  {
+    "feature": "literacy_rate",
+    "importance": 0.26853017068064776,
+    "impact": "positive",
+    "description": "Overall literacy rate in the population"
+  },
+  {
+    "feature": "internet_penetration",
+    "importance": 0.1939448980959927,
+    "impact": "positive",
+    "description": "Internet access level in the population"
+  },
+  {
+    "feature": "urban_ratio",
+    "importance": 0.14364889181078794,
+    "impact": "positive",
+    "description": "Proportion of urban population"
+  },
+  {
+    "feature": "rural_ratio",
+    "importance": 0.06120604799809208,
+    "impact": "positive",
+    "description": "Proportion of rural population"
+  },
+  {
+    "feature": "male_unemployment_rate",
+    "importance": 0.06067209016051201,
+    "impact": "positive",
+    "description": "Unemployment rate among males"
+  },
+  {
+    "feature": "household_size",
+    "importance": 0.05909242755692339,
+    "impact": "positive",
+    "description": "Average household size"
+  },
+  {
+    "feature": "male_literacy_rate",
+    "importance": 0.0446507716689839,
+    "impact": "positive",
+    "description": "Literacy rate among males"
+  },
+  {
+    "feature": "population_density",
+    "importance": 0.037099095406538525,
+    "impact": "positive",
+    "description": "Population per square kilometer"
+  },
+  {
+    "feature": "female_participation_gap",
+    "importance": 0.033562017252035585,
+    "impact": "positive",
+    "description": "Gap in workforce participation between genders"
+  },
+  {
+    "feature": "gender_ratio",
+    "importance": 0.02359944338409632,
+    "impact": "positive",
+    "description": "Number of females per 1000 males"
+  },
+  {
+    "feature": "female_literacy_rate",
+    "importance": 0.02138088099286024,
+    "impact": "positive",
+    "description": "Literacy rate among females"
+  },
+  {
+    "feature": "unemployment_rate",
+    "importance": 0.010220750146896833,
+    "impact": "positive",
+    "description": "Total unemployment rate"
+  },
+  {
+    "feature": "female_unemployment_rate",
+    "importance": 0.009912202917484524,
+    "impact": "positive",
+    "description": "Unemployment rate among females"
+  },
+  {
+    "feature": "working_participation_rate",
+    "importance": 0.008896741158388776,
+    "impact": "positive",
+    "description": "Overall workforce participation rate"
+  },
+  {
+    "feature": "dependency_ratio",
+    "importance": 0.008505650052035941,
+    "impact": "positive",
+    "description": "Ratio of dependents to working-age population"
+  },
+  {
+    "feature": "literacy_gender_gap",
+    "importance": 0.007956569721646332,
+    "impact": "positive",
+    "description": "Gap between male and female literacy rates"
+  },
+  {
+    "feature": "female_working_rate",
+    "importance": 0.007121350996077167,
+    "impact": "positive",
+    "description": "Female workforce participation rate"
+  }
+]
