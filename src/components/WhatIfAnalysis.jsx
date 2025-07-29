@@ -43,14 +43,6 @@ const WhatIfAnalysis = ({ originalData, onAnalysisChange }) => {
       max: parseInt(originalData.totalPopulation) || 100000,
       step: 100,
     },
-    householdsWithInternet: {
-      label: "Households with Internet",
-      description: "Digital connectivity access",
-      impact: -0.2,
-      min: 0,
-      max: parseInt(originalData.households) || 10000,
-      step: 10,
-    },
     unemployedPopulation: {
       label: "Unemployed Population",
       description: "Number of unemployed people",
