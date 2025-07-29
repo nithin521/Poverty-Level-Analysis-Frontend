@@ -5,37 +5,211 @@ import "./App.css";
 import axios from "axios";
 
 function App() {
+  // Empty initial form data
   const [formData, setFormData] = useState({
-    state: "UTTAR PRADESH",
-    district: "Bahraich",
-    area: "5237.0",
-    households: "603754",
-    totalPopulation: "3487731",
-    totalMales: "1843884",
-    totalFemales: "1643847",
-    literatePopulation: "1398368",
-    literateMales: "878285",
-    literateFemales: "739956",
-    illiteratePopulation: "2089363",
-    maleIlliterates: "965599",
-    femaleIlliterates: "1123764",
-    totalWorkingPopulation: "1152160",
-    totalWorkingMales: "895576",
-    totalWorkingFemales: "256584",
-    unemployedPopulation: "2335571",
-    unemployedMales: "948308",
-    unemployedFemales: "1387263",
-    households1: "760262",
-    ruralHouseholds: "698520",
-    urbanHouseholds: "61742",
-    householdsWithInternet: "2681",
+    state: "",
+    district: "",
+    area: "",
+    households: "",
+    totalPopulation: "",
+    totalMales: "",
+    totalFemales: "",
+    literatePopulation: "",
+    literateMales: "",
+    literateFemales: "",
+    illiteratePopulation: "",
+    maleIlliterates: "",
+    femaleIlliterates: "",
+    totalWorkingPopulation: "",
+    totalWorkingMales: "",
+    totalWorkingFemales: "",
+    unemployedPopulation: "",
+    unemployedMales: "",
+    unemployedFemales: "",
+    households1: "",
+    ruralHouseholds: "",
+    urbanHouseholds: "",
+    householdsWithInternet: "",
   });
+
+  // Test cases data
+  const testCases = {
+    "": {
+      label: "Select a test case...",
+      data: {
+        state: "",
+        district: "",
+        area: "",
+        households: "",
+        totalPopulation: "",
+        totalMales: "",
+        totalFemales: "",
+        literatePopulation: "",
+        literateMales: "",
+        literateFemales: "",
+        illiteratePopulation: "",
+        maleIlliterates: "",
+        femaleIlliterates: "",
+        totalWorkingPopulation: "",
+        totalWorkingMales: "",
+        totalWorkingFemales: "",
+        unemployedPopulation: "",
+        unemployedMales: "",
+        unemployedFemales: "",
+        households1: "",
+        ruralHouseholds: "",
+        urbanHouseholds: "",
+        householdsWithInternet: "",
+      },
+    },
+    uttar_pradesh_bahraich: {
+      label: "Uttar Pradesh - Bahraich (High Poverty)",
+      data: {
+        state: "UTTAR PRADESH",
+        district: "Bahraich",
+        area: "5237.0",
+        households: "603754",
+        totalPopulation: "3487731",
+        totalMales: "1843884",
+        totalFemales: "1643847",
+        literatePopulation: "1398368",
+        literateMales: "878285",
+        literateFemales: "739956",
+        illiteratePopulation: "2089363",
+        maleIlliterates: "965599",
+        femaleIlliterates: "1123764",
+        totalWorkingPopulation: "1152160",
+        totalWorkingMales: "895576",
+        totalWorkingFemales: "256584",
+        unemployedPopulation: "2335571",
+        unemployedMales: "948308",
+        unemployedFemales: "1387263",
+        households1: "760262",
+        ruralHouseholds: "698520",
+        urbanHouseholds: "61742",
+        householdsWithInternet: "2681",
+      },
+    },
+    maharashtra_mumbai: {
+      label: "Maharashtra - Mumbai (Low Poverty)",
+      data: {
+        state: "MAHARASHTRA",
+        district: "Mumbai",
+        area: "603.4",
+        households: "3142696",
+        totalPopulation: "12442373",
+        totalMales: "6887767",
+        totalFemales: "5554606",
+        literatePopulation: "10893586",
+        literateMales: "6127431",
+        literateFemales: "4766155",
+        illiteratePopulation: "1548787",
+        maleIlliterates: "760336",
+        femaleIlliterates: "788451",
+        totalWorkingPopulation: "5247823",
+        totalWorkingMales: "3654398",
+        totalWorkingFemales: "1593425",
+        unemployedPopulation: "7194550",
+        unemployedMales: "3233369",
+        unemployedFemales: "3961181",
+        households1: "3142696",
+        ruralHouseholds: "15432",
+        urbanHouseholds: "3127264",
+        householdsWithInternet: "1876542",
+      },
+    },
+    bihar_gaya: {
+      label: "Bihar - Gaya (Medium-High Poverty)",
+      data: {
+        state: "BIHAR",
+        district: "Gaya",
+        area: "4976.0",
+        households: "871254",
+        totalPopulation: "4391418",
+        totalMales: "2324587",
+        totalFemales: "2066831",
+        literatePopulation: "2198435",
+        literateMales: "1365728",
+        literateFemales: "832707",
+        illiteratePopulation: "2192983",
+        maleIlliterates: "958859",
+        femaleIlliterates: "1234124",
+        totalWorkingPopulation: "1653892",
+        totalWorkingMales: "1289765",
+        totalWorkingFemales: "364127",
+        unemployedPopulation: "2737526",
+        unemployedMales: "1034822",
+        unemployedFemales: "1702704",
+        households1: "871254",
+        ruralHouseholds: "789342",
+        urbanHouseholds: "81912",
+        householdsWithInternet: "12453",
+      },
+    },
+    kerala_thiruvananthapuram: {
+      label: "Kerala - Thiruvananthapuram (Low-Medium Poverty)",
+      data: {
+        state: "KERALA",
+        district: "Thiruvananthapuram",
+        area: "2192.0",
+        households: "826234",
+        totalPopulation: "3301427",
+        totalMales: "1582036",
+        totalFemales: "1719391",
+        literatePopulation: "2975632",
+        literateMales: "1465789",
+        literateFemales: "1509843",
+        illiteratePopulation: "325795",
+        maleIlliterates: "116247",
+        femaleIlliterates: "209548",
+        totalWorkingPopulation: "1287654",
+        totalWorkingMales: "743896",
+        totalWorkingFemales: "543758",
+        unemployedPopulation: "2013773",
+        unemployedMales: "838140",
+        unemployedFemales: "1175633",
+        households1: "826234",
+        ruralHouseholds: "456789",
+        urbanHouseholds: "369445",
+        householdsWithInternet: "234567",
+      },
+    },
+    rajasthan_jaisalmer: {
+      label: "Rajasthan - Jaisalmer (Medium Poverty)",
+      data: {
+        state: "RAJASTHAN",
+        district: "Jaisalmer",
+        area: "38401.0",
+        households: "144523",
+        totalPopulation: "669919",
+        totalMales: "362738",
+        totalFemales: "307181",
+        literatePopulation: "387654",
+        literateMales: "243821",
+        literateFemales: "143833",
+        illiteratePopulation: "282265",
+        maleIlliterates: "118917",
+        femaleIlliterates: "163348",
+        totalWorkingPopulation: "298765",
+        totalWorkingMales: "234567",
+        totalWorkingFemales: "64198",
+        unemployedPopulation: "371154",
+        unemployedMales: "128171",
+        unemployedFemales: "242983",
+        households1: "144523",
+        ruralHouseholds: "98765",
+        urbanHouseholds: "45758",
+        householdsWithInternet: "8934",
+      },
+    },
+  };
 
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showWhatIf, setShowWhatIf] = useState(true);
   const [showXAI, setShowXAI] = useState(true);
   const [whatIfResults, setWhatIfResults] = useState(null);
+  const [selectedTestCase, setSelectedTestCase] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -44,6 +218,19 @@ function App() {
       [name]: value,
     }));
   };
+
+  const handleTestCaseChange = (e) => {
+    const selectedCase = e.target.value;
+    setSelectedTestCase(selectedCase);
+
+    if (selectedCase && testCases[selectedCase]) {
+      setFormData(testCases[selectedCase].data);
+      // Clear previous prediction when switching test cases
+      setPrediction(null);
+      setWhatIfResults(null);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -60,25 +247,6 @@ function App() {
     }
     setLoading(false);
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-
-  //   // Simulate API call to your model
-  //   setTimeout(() => {
-  //     // Mock prediction results - replace with actual API call
-  //     const mockMpiHcr = (Math.random() * 0.6 + 0.1).toFixed(3);
-  //     const mockPovertyLevel = parseFloat(mockMpiHcr) > 0.3 ? "High" : "Low";
-
-  //     setPrediction({
-  //       mpiHcr: mockMpiHcr,
-  //       povertyLevel: mockPovertyLevel,
-  //       confidence: (Math.random() * 0.2 + 0.8).toFixed(2),
-  //     });
-  //     setLoading(false);
-  //   }, 2000);
-  // };
 
   const resetForm = () => {
     setFormData({
@@ -107,6 +275,8 @@ function App() {
       householdsWithInternet: "",
     });
     setPrediction(null);
+    setSelectedTestCase("");
+    setWhatIfResults(null);
   };
 
   const handleWhatIfAnalysis = (results) => {
@@ -129,9 +299,36 @@ function App() {
             className="prediction-form"
             method="POST"
           >
+            {/* Test Cases Section */}
+            <div className="form-section">
+              <h3>🧪 Test Cases</h3>
+              <div className="form-grid">
+                <div className="form-group" style={{ gridColumn: "1 / -1" }}>
+                  <label htmlFor="testCase">Load Sample Data</label>
+                  <select
+                    id="testCase"
+                    name="testCase"
+                    value={selectedTestCase}
+                    onChange={handleTestCaseChange}
+                    className="test-case-select"
+                  >
+                    {Object.entries(testCases).map(([key, testCase]) => (
+                      <option key={key} value={key}>
+                        {testCase.label}
+                      </option>
+                    ))}
+                  </select>
+                  <small className="form-help">
+                    Select a pre-configured test case to auto-fill the form with
+                    sample data
+                  </small>
+                </div>
+              </div>
+            </div>
+
             {/* Location Information */}
             <div className="form-section">
-              <h3>Location Information</h3>
+              <h3>📍 Location Information</h3>
               <div className="form-grid">
                 <div className="form-group">
                   <label htmlFor="state">State</label>
@@ -172,7 +369,7 @@ function App() {
 
             {/* Population Demographics */}
             <div className="form-section">
-              <h3>Population Demographics</h3>
+              <h3>👥 Population Demographics</h3>
               <div className="form-grid">
                 <div className="form-group">
                   <label htmlFor="households">Households</label>
@@ -223,7 +420,7 @@ function App() {
 
             {/* Literacy Statistics */}
             <div className="form-section">
-              <h3>Literacy Statistics</h3>
+              <h3>📚 Literacy Statistics</h3>
               <div className="form-grid">
                 <div className="form-group">
                   <label htmlFor="literatePopulation">
@@ -300,7 +497,7 @@ function App() {
 
             {/* Employment Statistics */}
             <div className="form-section">
-              <h3>Employment Statistics</h3>
+              <h3>💼 Employment Statistics</h3>
               <div className="form-grid">
                 <div className="form-group">
                   <label htmlFor="totalWorkingPopulation">
@@ -379,7 +576,7 @@ function App() {
 
             {/* Household Types */}
             <div className="form-section">
-              <h3>Household Types</h3>
+              <h3>🏠 Household Types</h3>
               <div className="form-grid">
                 <div className="form-group">
                   <label htmlFor="households1">Households (Secondary)</label>
@@ -436,16 +633,17 @@ function App() {
                 onClick={resetForm}
                 className="btn btn-secondary"
               >
-                Reset Form
+                🔄 Reset Form
               </button>
               <button
                 type="submit"
                 disabled={loading}
                 className="btn btn-primary"
               >
-                {loading ? "Analyzing..." : "Predict Poverty Level"}
+                {loading ? "🔄 Analyzing..." : "🔍 Predict Poverty Level"}
               </button>
             </div>
+
             {prediction && (
               <div className="analysis-buttons">
                 <button
@@ -468,7 +666,7 @@ function App() {
 
           {prediction && (
             <div className="results-section">
-              <h3>Prediction Results</h3>
+              <h3>📈 Prediction Results</h3>
               <div className="results-grid">
                 <div className="result-card">
                   <div className="result-label">MPI HCR (Regression)</div>
@@ -490,15 +688,6 @@ function App() {
                     Classification based on demographic analysis
                   </div>
                 </div>
-                {/* <div className="result-card">
-                  <div className="result-label">Model Confidence</div>
-                  <div className="result-value">
-                  {(prediction.confidence * 100).toFixed(0)}%
-                  </div>
-                  <div className="result-description">
-                  Prediction reliability score
-                  </div>
-                  </div> */}
               </div>
             </div>
           )}
@@ -506,7 +695,7 @@ function App() {
           {showXAI && prediction && (
             <FeatureImportance formData={formData} prediction={prediction} />
           )}
-          {showWhatIf && (
+          {prediction && showWhatIf && (
             <WhatIfAnalysis
               originalData={formData}
               onAnalysisChange={handleWhatIfAnalysis}
