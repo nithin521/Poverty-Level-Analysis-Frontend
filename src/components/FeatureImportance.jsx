@@ -264,30 +264,7 @@ const FeatureImportance = ({
               </ResponsiveContainer>
             </div>
 
-            {/* Comparison insights */}
-            <div className="model-comparison">
-              <h5>🔄 Model Comparison Insights</h5>
-              <div className="comparison-grid">
-                <div className="comparison-card">
-                  <h6>📈 Regression Model</h6>
-                  <ul>
-                    <li>Provides continuous poverty scores (0-1)</li>
-                    <li>Better for understanding poverty severity</li>
-                    <li>Useful for policy intervention targeting</li>
-                    <li>Shows gradual poverty transitions</li>
-                  </ul>
-                </div>
-                <div className="comparison-card">
-                  <h6>🎯 Classification Model</h6>
-                  <ul>
-                    <li>Provides discrete poverty categories</li>
-                    <li>Better for binary decision making</li>
-                    <li>Useful for resource allocation</li>
-                    <li>Shows clear poverty thresholds</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            
           </div>
         </div>
       )}
